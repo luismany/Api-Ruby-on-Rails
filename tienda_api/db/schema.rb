@@ -10,15 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_044351) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_034532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-
-  create_table "categoria", force: :cascade do |t|
-    t.string "nombre"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "categorias", force: :cascade do |t|
     t.string "nombre"
@@ -44,5 +38,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_044351) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "productos", "categoria"
+  add_foreign_key "productos", "categorias", name: "fk_productos_categoria_id"
 end

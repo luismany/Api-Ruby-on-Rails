@@ -8,7 +8,7 @@ class Api::V1::CategoriasController < ApplicationController
   end
 
   def show
-   render json: categoria
+   render json: @categoria
   end
 
   def create

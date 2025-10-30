@@ -1,14 +1,16 @@
 class Api::V1::ProductosController < ApplicationController
-before_action :autenticar_usuario, only: [:create, :update, :destroy]
-before_action :set_producto, only: [:show, :update, :destroy]
+before_action :autenticar_usuario, only: [ :create, :update, :destroy ]
+before_action :set_producto, only: [ :show, :update, :destroy ]
 
   def index
     @productos = Producto.all
-    render json: @productos
+    render json: @productos.to_json(only: [ :id, :nombre, :descripcion, :precio ], include: { categoria: { only: [ :id, :nombre ] } })
   end
 
+
   def show
-    render json: @producto
+    # Incluir detalles de la categoría asociada
+    render json: @producto.to_json(only: [ :id, :nombre, :descripcion, :precio ], include: { categoria: { only: [ :id, :nombre ] } })
   end
 
   def create
@@ -21,7 +23,6 @@ before_action :set_producto, only: [:show, :update, :destroy]
   end
 
   def update
-
     if @producto.update(producto_params)
       render json: @producto
     else
@@ -30,7 +31,6 @@ before_action :set_producto, only: [:show, :update, :destroy]
   end
 
   def destroy
-    
     @producto.destroy
     head :no_content
   end
@@ -40,10 +40,9 @@ before_action :set_producto, only: [:show, :update, :destroy]
     params.require(:producto).permit(:nombre, :descripcion, :precio, :categoria_id)
   end
 
-  def set_producto 
+  def set_producto
     @producto = Producto.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Producto no encontrado' }, status: :not_found
+    render json: { error: "Producto no encontrado" }, status: :not_found
   end
-
 end
